@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+a {
+  text-decoration: none;
+}
+body {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 16px;
+}
+ol,
+ul {
+  padding-left: 0rem;
+}
+
