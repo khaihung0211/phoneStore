@@ -13,7 +13,7 @@ router.get("/", productController.getAllProducts);
 router.get("/featured", productController.getFeaturedProducts);
 router.get("/:id", productController.getProductById);
 
-router.post(
+router.post(//nhận được request của client thông qua route ( thêm)
   "/",
   protect,
   upload.single("image"),
@@ -30,7 +30,7 @@ router.post(
   productController.createProduct
 );
 
-router.put(
+router.put(//nhận được request của client tại route (cập nhật)
   "/:id",
   protect,
   upload.single("image"),

@@ -4,7 +4,7 @@ import { getCategories } from '../../../services/categoryService';
 import { getProductById, updateProduct } from '../../../services/productService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+// cập nhật sản phẩm
 function EditProductPage() {
     const navigate = useNavigate();
     const { id } = useParams();

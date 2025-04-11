@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getUserProfile, updateUserProfile } from '../services';
+import { getUserById, getUserProfile, updateUserProfile } from '../services';
 
 const ProfilePage = () => {
   const { currentUser, logout } = useAuth();
@@ -11,6 +11,8 @@ const ProfilePage = () => {
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+
   
   const [profile, setProfile] = useState({
     fullName: '',
@@ -30,7 +32,7 @@ const ProfilePage = () => {
     const fetchUserProfile = async () => {
       try {
         setLoading(true);
-        const response = await getUserProfile();
+        const response = await getUserById(currentUser._id);
         
         setProfile({
           fullName: response.data.fullName || '',

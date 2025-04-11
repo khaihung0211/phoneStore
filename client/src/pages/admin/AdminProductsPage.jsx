@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getProducts, searchProducts } from '../../services/productService';
 import { getCategories } from '../../services/categoryService';
-
+// hiển thị ds sp
 function AdminProductsPage() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,9 +22,9 @@ function AdminProductsPage() {
     ]);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
 
-    useEffect(() => {
+    useEffect(() => { // Định nghĩa hàm async để fetch dữ liệu sản phẩm
         const fetchCategories = async () => {
-            try {
+            try { // Bật trạng thái loading
                 setCategoriesLoading(true);
                 const response = await getCategories();
 
@@ -59,68 +59,69 @@ function AdminProductsPage() {
 
                 if (searchQuery) {
                     response = await searchProducts(searchQuery);
-                } else {
+                } else {                 // Nếu không có từ khóa -> gọi API lấy danh sách theo danh mục (nếu khác 'all')
                     const categoryParam = categoryFilter !== 'all' ? categoryFilter : null;
-                    response = await getProducts(categoryParam, currentPage, limit);
+                    response = await getProducts(categoryParam, currentPage, limit);// In ra kết quả API để kiểm tra 
                 }
 
-                console.log("API Response:", response);
+                console.log("API Response:", response);             
 
-                if (response && response.success === true) {
-                    const productsArray = response.data || [];
+                if (response && response.success === true) { // Nếu phản hồi hợp lệ
+
+                    const productsArray = response.data || [];// Lấy danh sách sản phẩm, tổng số sản phẩm, và tổng số trang từ response
                     setTotalCount(response.count || 0);
-                    setTotalPages(response.totalPages || 1);
+                    setTotalPages(response.totalPages || 1);// Clone mảng sản phẩm để thực hiện sắp xếp phía client
 
                     // Apply client-side sorting
-                    let sortedProducts = [...productsArray];
+                    let sortedProducts = [...productsArray]; // Sắp xếp theo tuỳ chọn được chọn
 
                     switch (sortOption) {
-                        case 'newest':
+                        case 'newest':// Sắp xếp theo ngày tạo mới nhất
                             sortedProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
                             break;
                         case 'oldest':
-                            sortedProducts.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+                            sortedProducts.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));// Sắp xếp theo ngày tạo cũ nhất
                             break;
                         case 'price_high':
-                            sortedProducts.sort((a, b) => (b.price || 0) - (a.price || 0));
+                            sortedProducts.sort((a, b) => (b.price || 0) - (a.price || 0));// Giá từ cao đến thấp
                             break;
                         case 'price_low':
-                            sortedProducts.sort((a, b) => (a.price || 0) - (b.price || 0));
+                            sortedProducts.sort((a, b) => (a.price || 0) - (b.price || 0));                         // Giá từ thấp đến cao
                             break;
                         case 'name_asc':
-                            sortedProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                            sortedProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));                        // Tên từ A-Z
                             break;
                         case 'name_desc':
-                            sortedProducts.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+                            sortedProducts.sort((a, b) => (b.name || '').localeCompare(a.name || ''));// Tên từ Z-A
                             break;
-                        case 'stock_low':
+                        case 'stock_low':// Sắp xếp tồn kho thấp đến cao (dùng countInStock hoặc stock)
                             sortedProducts.sort((a, b) =>
-                                ((a.countInStock || a.stock || 0) - (b.countInStock || b.stock || 0))
+                                ((a.countInStock || a.stock || 0) - (b.countInStock || b.stock || 0)) // Không sắp xếp nếu không khớp
                             );
                             break;
                         default:
                             break;
                     }
 
-                    setProducts(sortedProducts);
-                    setError(null);
-                } else {
+                    setProducts(sortedProducts);// Cập nhật danh sách sản phẩm sau khi sắp xếp
+                    setError(null);// Xoá thông báo lỗi nếu có
+                } else {// Trường hợp phản hồi không đúng định dạng
                     // Handle unexpected response format
                     console.error('Unexpected API response format:', response);
                     setError('Nhận được phản hồi không hợp lệ từ máy chủ.');
-                    setProducts([]);
+                    setProducts([]);// Clear danh sách sản phẩm
                 }
-            } catch (err) {
+            } catch (err) {            // Bắt lỗi khi fetch API thất bại
                 console.error('Error fetching products:', err);
                 setError('Không thể tải sản phẩm. Vui lòng thử lại.');
-                setProducts([]);
-            } finally {
+                setProducts([]);// Clear danh sách sản phẩm
+            } finally {            // Tắt trạng thái loading
                 setLoading(false);
             }
         };
 
-        fetchProductData();
-    }, [currentPage, searchQuery, categoryFilter, sortOption, limit]);
+        fetchProductData();    // Gọi hàm fetch khi component mount hoặc khi dependencies thay đổi
+    }, [currentPage, searchQuery, categoryFilter, sortOption, limit]);// useEffect sẽ re-run khi có thay đổi ở các state: phân trang, tìm kiếm, lọc, sắp xếp, giới hạn số lượng
 
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -156,12 +157,12 @@ function AdminProductsPage() {
         }
     };
 
-    const confirmDelete = (product) => {
+    const confirmDelete = (product) => { // xóa sp ở client
         setProductToDelete(product);
         setIsDeleteModalOpen(true);
     };
 
-    const deleteProduct = async () => {
+    const deleteProduct = async () => { // thực hiện xóa
         if (!productToDelete) return;
 
         try {
@@ -173,7 +174,7 @@ function AdminProductsPage() {
         } catch (err) {
             console.error('Lỗi khi xóa sản phẩm:', err);
         }
-    };
+    };//
 
     const handleBulkAction = async (action) => {
         if (selectedProducts.length === 0) return;

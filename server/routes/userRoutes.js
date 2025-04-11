@@ -5,11 +5,11 @@ const { protect, restrictTo } = require("../middleware/auth");
 
 router.get("/", protect, restrictTo('admin'), userController.getAllUsers);
 
-router.get("/:id", protect, restrictTo('admin'), userController.getUserById);
+router.get("/:id", protect,  userController.getUserById);
 
 router.post("/", protect, restrictTo('admin'), userController.createUser);
 
-router.patch("/:id", protect, restrictTo('admin'), userController.updateUser);
+router.patch("/:id", protect, userController.updateUser);
 
 router.delete("/:id", protect, restrictTo('admin'), userController.deleteUser);
 

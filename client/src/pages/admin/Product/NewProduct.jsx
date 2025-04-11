@@ -5,7 +5,7 @@ import { createProduct } from '../../../services/productService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function NewProductPage() {
+function NewProductPage() {// thêm sp mới
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -52,7 +52,7 @@ function NewProductPage() {
         fetchCategories();
     }, []);
 
-    const handleChange = (e) => {
+    const handleChange = (e) => { //Người dung điền thông tin của sản phẩm sau đó chọn tạo sản phẩm sẽ kích hoạt hàm handleSubmit
         const { name, value, type, checked } = e.target;
         setFormData(prevData => ({
             ...prevData,
@@ -144,7 +144,7 @@ function NewProductPage() {
         } finally {
             setLoading(false);
         }
-    };
+    };/// Hàm handleSubmit tạo request methob POST đến api /product kèm data product để tạo sản phẩm mới
 
     return (
         <div className="new-product-container">

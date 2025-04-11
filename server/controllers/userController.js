@@ -22,7 +22,7 @@ exports.getAllUsers = asyncHandler(async (req, res) => {
 
 exports.getUserById = asyncHandler(async (req, res) => {
   const userId = req.params.id;
-
+  console.log("ID: ", userId)
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     return res.status(400).json({ success: false, message: "ID không hợp lệ" });
   }
@@ -61,7 +61,7 @@ exports.createUser = asyncHandler(async (req, res) => {
 });
 
 exports.updateUser = asyncHandler(async (req, res) => {
-  const userId = req.params.id;
+  const userId = req.user.id;
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     return res.status(400).json({ success: false, message: "ID không hợp lệ" });

@@ -1,9 +1,9 @@
 const Product = require("../models/Product");
-
+// nhận dc request của client ở route sau đó sẽ gọi getallproducts
 exports.searchProducts = async (req, res) => {
   const { query } = req.query;
 
-  try {
+  try {//
     const products = await Product.find({
       $or: [
         { name: { $regex: query, $options: "i" } },
@@ -24,7 +24,7 @@ exports.searchProducts = async (req, res) => {
     });
   }
 };
-exports.getAllProducts = async (req, res) => {
+exports.getAllProducts = async (req, res) => { ///
   try {
     const {
       page = 1,
@@ -125,7 +125,7 @@ exports.getProductById = async (req, res) => {
   }
 };
 
-exports.createProduct = async (req, res) => {
+exports.createProduct = async (req, res) => {//sau đó sẽ truyền data đó đến createProduct (hiển thị)
   try {
     console.log("Body nhận được:", req.body);
     console.log("File nhận được:", req.file);
@@ -150,7 +150,7 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-exports.updateProduct = async (req, res) => {
+exports.updateProduct = async (req, res) => {//Product route sẽ xác minh user như quyền truy cập rule và token, sau đó sẽ truyền data vào updateProduct controller để xử lý
   try {
     const updateData = req.body;
 
@@ -183,7 +183,7 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-exports.deleteProduct = async (req, res) => {
+exports.deleteProduct = async (req, res) => {//sẽ nhận dữ liệu là id của product sau đó truyền vào controller để xác minh dữ liệu đầu vào đây
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
 
@@ -204,4 +204,4 @@ exports.deleteProduct = async (req, res) => {
       message: error.message,
     });
   }
-};
+};//

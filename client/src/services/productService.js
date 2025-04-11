@@ -1,5 +1,5 @@
 import api from "./axiosConfig";
-
+//Hàm getProducts lấy data product từ api /products bằng phương thức get. Api sẽ trả về data dạng json
 export const addToCart = async (productId, cartData) => {
   try {
     const response = await api.post(`/cart`, { productId, ...cartData });
@@ -90,7 +90,7 @@ export const searchProducts = async (query) => {
   }
 };
 
-export const updateProduct = async (id, productData) => {
+export const updateProduct = async (id, productData) => {//Product route sẽ xác minh user như quyền truy cập rule và token, sau đó sẽ truyền data vào updateProduct controller để xử lý
   try {
     const response = await api.put(`/products/${id}`, productData, {
       headers: {
@@ -104,7 +104,7 @@ export const updateProduct = async (id, productData) => {
   }
 };
 
-export const deleteProduct = async (id) => {
+export const deleteProduct = async (id) => {//DETELE đến api /products/${id} để xóa product và nhận phản hồi kết quả từ api dạng json
   try {
     const response = await api.delete(`/products/${id}`);
     return response.data;
